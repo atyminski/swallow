@@ -1,0 +1,44 @@
+﻿<div>
+    @if (_tasks.Any())
+    {
+        <div class="row">
+            <ul class="list-group w-100">
+                @foreach (var task in _tasks)
+                {
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-10 d-flex">
+                                <span class="align-self-center">
+                                    @task.Name
+                                </span>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end">
+                                <button class="btn btn-danger ml-1 mr-1" @onclick="@(e => Delete(task.Id))">
+                                    <span class="oi oi-trash" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn btn-primary ml-1 mr-1">
+                                    <span class="oi oi-media-play" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    @if (!ReadOnly)
+    {
+<div class="row mt-2">
+    <div class="col-11 p-0">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter task name" aria-label="Task Name" @onkeyup="OnKeyUp" @bind-value="_currentTaskName">
+            </div>
+    </div>
+    <div class="col-1">
+        <button class="btn btn-success w-100" @onclick="Add">
+            <span class="oi oi-plus" aria-hidden="true"></span>
+        </button>
+    </div>
+</div>
+    }
+</div>
