@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Gevlee.Swallow.Core.Persistence;
+using Gevlee.Swallow.Core.Persistence.Repository;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Gevlee.Swallow.Api
 {
@@ -29,6 +25,8 @@ namespace Gevlee.Swallow.Api
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+			services.AddScoped<ILiteDatabase>((provider) => new LiteDatabase("swallow.db", LiteDbConfig.Mapper));
+			services.AddTransient<ITaskRepository, TaskRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
