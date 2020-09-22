@@ -1,8 +1,8 @@
-using Gevlee.Swallow.Core.Persistence;
-using Gevlee.Swallow.Core.Persistence.Repository;
-using LiteDB;
+using FluentValidation.AspNetCore;
+using Gevlee.Swallow.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,9 +24,14 @@ namespace Gevlee.Swallow.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers();
-			services.AddScoped<ILiteDatabase>((provider) => new LiteDatabase("swallow.db", LiteDbConfig.Mapper));
-			services.AddTransient<ITaskRepository, TaskRepository>();
+			services.AddControllers()
+			.AddFluentValidation(options =>
+			{
+				options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+				options.RegisterValidatorsFromAssemblyContaining<Startup>();
+			});
+			services.AddLiteDbPersistance("swallow.db");
+			services.AddLiteDbRepositories();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

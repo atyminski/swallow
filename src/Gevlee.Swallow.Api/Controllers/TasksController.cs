@@ -1,4 +1,5 @@
-﻿using Gevlee.Swallow.Core.Entities;
+﻿using Gevlee.Swallow.Api.Contract.Tasks;
+using Gevlee.Swallow.Core.Entities;
 using Gevlee.Swallow.Core.Persistence.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,13 @@ namespace Gevlee.Swallow.Api.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Create([FromBody]Task task)
+		public IActionResult Create([FromBody]TaskModel task)
 		{
-			taskRepository.Insert(task);
+			taskRepository.Insert(new Task
+			{
+				Name = task.Name,
+				Date = task.Date
+			});
 			return new OkResult();
 		}
 	}
