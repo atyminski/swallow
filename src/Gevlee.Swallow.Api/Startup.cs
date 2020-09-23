@@ -1,11 +1,13 @@
 using FluentValidation.AspNetCore;
 using Gevlee.Swallow.Core;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Api
 {
@@ -40,12 +42,38 @@ namespace Gevlee.Swallow.Api
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
+				app.UseCors(options =>
+				{
+					options.AllowAnyOrigin();
+					options.AllowAnyMethod();
+					options.AllowAnyHeader();
+				});
 			}
 
 			//app.UseHttpsRedirection();
 
-			app.UseCors(c => {
-				c.AllowAnyOrigin();
+			app.Use((context, next) => {
+				return Task.Run(async () => 
+				{
+					var db = context.RequestServices.GetRequiredService<ILiteDatabase>();
+					try
+					{
+						if (db.BeginTrans())
+						{
+							await next.Invoke();
+							db.Commit();
+						}
+						else
+						{
+							throw new System.Exception("Cannot open transaction");
+						}
+					}
+					catch (System.Exception e)
+					{
+						db.Rollback();
+						throw;
+					}
+				});
 			});
 
 			app.UseRouting();

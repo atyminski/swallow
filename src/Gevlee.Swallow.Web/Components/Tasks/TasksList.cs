@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Web.Components.Tasks
 {
-	public partial class TasksList
+	public partial class TasksList : ComponentBase
 	{
 		private ICollection<TaskViewModel> _tasks = new List<TaskViewModel>();
 
@@ -28,38 +29,39 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 			get; set;
 		}
 
-		private void Add()
+		private async Task Add()
 		{
-			TasksService.AddTask(Date, new TaskViewModel
+			await TasksService.AddTaskAsync(Date, new TaskViewModel
 			{
 				Name = _currentTaskName
 			});
 			_currentTaskName = null;
-			Refresh();
+			await Refresh();
 		}
 
-		private void OnKeyUp(KeyboardEventArgs args)
+		private async void OnKeyUp(KeyboardEventArgs args)
 		{
 			if(args.Code == "Enter")
 			{
-				Add();
+				await Add();
 			}
 		}
 
 		public void Delete(int id)
 		{
-			TasksService.DeleteTask(Date, id);
-			Refresh();
+			//TasksService.DeleteTask(Date, id);
+			//Refresh();
 		}
 
-		private void Refresh()
+		private async Task Refresh()
 		{
-			_tasks = TasksService.GetTasks(DateTime.Now.Date).ToList();
+			_tasks = (await TasksService.GetTasksAsync(DateTime.Now.Date)).ToList();
+			StateHasChanged();
 		}
 
-		protected override void OnInitialized()
+		protected override async void OnInitialized()
 		{
-			Refresh();
+			await Refresh();
 		}
 	}
 }

@@ -1,13 +1,13 @@
 ﻿using Gevlee.Swallow.Web.Model;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Web.Services
 {
 	public interface ITasksService
 	{
-		void AddTask(DateTime date, TaskViewModel model);
-		void DeleteTask(DateTime date, int id);
-		IEnumerable<TaskViewModel> GetTasks(DateTime dateTime);
+		Task AddTaskAsync(DateTime date, TaskViewModel model);
+		Task<IEnumerable<TaskViewModel>> GetTasksAsync(DateTime dateTime);
 	}
 }

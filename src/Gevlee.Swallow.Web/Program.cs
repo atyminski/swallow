@@ -15,7 +15,7 @@ namespace Gevlee.Swallow.Web
 			builder.RootComponents.Add<App>("app");
 
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5000") });
-			builder.Services.AddSingleton<ITasksService>(new InMemoryTasksService());
+			builder.Services.AddApiService<ITasksService, ApiTaskService>();
 
 			await builder.Build().RunAsync();
 		}
