@@ -16,13 +16,16 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 		private string _currentTaskName;
 
 		[Parameter]
-		public DateTime Date
-		{
-			get; set;
+		public DateTime Date 
+		{ 
+			get; set; 
 		} = DateTime.Now;
 
 		[Inject]
-		protected ITasksService TasksService { get; set; }
+		protected ITasksService TasksService
+		{
+			get; set;
+		}
 
 		public bool ReadOnly
 		{
@@ -41,7 +44,7 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 
 		private async void OnKeyUp(KeyboardEventArgs args)
 		{
-			if(args.Code == "Enter")
+			if (args.Code == "Enter")
 			{
 				await Add();
 			}

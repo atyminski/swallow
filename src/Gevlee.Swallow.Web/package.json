@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "swallow",
+  "private": true,
+  "scripts": {
+    "compile": "gulp"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0"
+  },
+  "dependencies": {}
+}
