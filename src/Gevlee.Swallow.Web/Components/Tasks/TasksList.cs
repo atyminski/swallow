@@ -58,11 +58,16 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 
 		private async Task Refresh()
 		{
-			_tasks = (await TasksService.GetTasksAsync(DateTime.Now.Date)).ToList();
+			_tasks = (await TasksService.GetTasksAsync(Date)).ToList();
 			StateHasChanged();
 		}
 
-		protected override async void OnInitialized()
+		//protected override async void OnInitialized()
+		//{
+		//	await Refresh();
+		//}
+
+		protected override async Task OnParametersSetAsync()
 		{
 			await Refresh();
 		}

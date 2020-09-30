@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Gevlee.Swallow.Web.Settings;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Gevlee.Swallow.Web
@@ -9,9 +11,18 @@ namespace Gevlee.Swallow.Web
 			where T : class
 			where TInstance : class, T
 		{
-			serviceCollection.AddHttpClient<T, TInstance>(client =>
+			serviceCollection.AddHttpClient<T, TInstance>((provider, client) =>
 			{
-				client.BaseAddress = new Uri("http://localhost:5000");
+				var environment = provider.GetRequiredService<IWebAssemblyHostEnvironment>();
+				var apiUrl = provider.GetRequiredService<AppConfiguration>().Api.Url;
+				
+				if (string.IsNullOrWhiteSpace(apiUrl) || apiUrl.StartsWith('/'))
+				{
+					apiUrl = $"{environment.BaseAddress}{apiUrl.TrimStart('/')}";
+				}
+
+				apiUrl = apiUrl.TrimEnd('/') + "/";
+				client.BaseAddress = new Uri(apiUrl);
 			});
 			return serviceCollection;
 		}

@@ -1,6 +1,6 @@
 ﻿@page "/"
 
-<DaySwitch />
+<DaySwitch @bind-Current="Date"/>
 <div class="mt-4">
-    <Gevlee.Swallow.Web.Components.Tasks.TasksList />
+    <Gevlee.Swallow.Web.Components.Tasks.TasksList Date="@Date"/>
 </div>

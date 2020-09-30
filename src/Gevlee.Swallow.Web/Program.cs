@@ -1,8 +1,11 @@
 using Gevlee.Swallow.Web.Services;
+using Gevlee.Swallow.Web.Settings;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Net.Http;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Web
@@ -14,10 +17,35 @@ namespace Gevlee.Swallow.Web
 			var builder = WebAssemblyHostBuilder.CreateDefault(args);
 			builder.RootComponents.Add<App>("app");
 
-			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5000") });
-			builder.Services.AddApiService<ITasksService, ApiTaskService>();
+			ConfigureConfiguration(builder.Configuration, builder.HostEnvironment);
+			ConfigureServices(builder.Services, builder.HostEnvironment);
 
-			await builder.Build().RunAsync();
+			var host = builder.Build();
+
+			await host.RunAsync();
+		}
+
+		private static void ConfigureServices(IServiceCollection services, IWebAssemblyHostEnvironment hostEnvironment)
+		{
+			services.AddTransient(provider =>
+			{
+				return provider.GetRequiredService<IConfiguration>().Get<AppConfiguration>();
+			});
+			services.AddApiService<ITasksService, ApiTaskService>();
+		}
+
+		private static void ConfigureConfiguration(IConfigurationBuilder configurationBuilder, IWebAssemblyHostEnvironment hostEnvironment)
+		{
+			Assembly assembly = typeof(Program).Assembly;
+
+			var appsettingsFiles = assembly.GetManifestResourceNames()
+				.Where(f => f.Contains("appsettings.", StringComparison.OrdinalIgnoreCase) && f.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+				.ToList();
+
+			foreach (var resourceName in appsettingsFiles)
+			{
+				configurationBuilder.AddJsonStream(assembly.GetManifestResourceStream(resourceName));
+			}
 		}
 	}
 }

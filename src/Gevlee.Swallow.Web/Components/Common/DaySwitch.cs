@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Web.Components.Common
 {
@@ -11,14 +12,22 @@ namespace Gevlee.Swallow.Web.Components.Common
 			get; set;
 		} = DateTime.Now.Date;
 
-		private void NextDay()
+		[Parameter]
+		public EventCallback<DateTime> CurrentChanged
 		{
-			Current = Current.AddDays(1);
+			get; set;
 		}
 
-		private void PreviousDay()
+		private Task NextDay()
+		{
+			Current = Current.AddDays(1);
+			return CurrentChanged.InvokeAsync(Current);
+		}
+
+		private Task PreviousDay()
 		{
 			Current = Current.AddDays(-1);
+			return CurrentChanged.InvokeAsync(Current);
 		}
 	}
 }

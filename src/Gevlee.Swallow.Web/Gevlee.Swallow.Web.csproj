@@ -32,8 +32,21 @@
     <Watch Include="gulpfile.js;Js/**/*.js;Sass/**/*.scss" Exclude="node_modules/**/*;bin/**/*;obj/**/*" />
   </ItemGroup>
 
-  <Target Name="BuildFrontend" BeforeTargets="Build">
+  <!-- Embedd production appsettings -->
+  <ItemGroup>
+    <EmbeddedResource Include="appsettings.json" />
+  </ItemGroup>
+
+  <!-- Embedd local appsettings -->
+  <ItemGroup Condition="Exists('appsettings.local.json') And $(Configuration)=='Debug'">
+    <EmbeddedResource Include="appsettings.local.json" />
+  </ItemGroup>
+  
+  <Target Name="RestoreNpm" BeforeTargets="BuildFrontend" Condition="!Exists('node_modules')">
     <Exec Command="npm install" />
+  </Target>
+  
+  <Target Name="BuildFrontend" BeforeTargets="Build">
     <Exec Command="npm run compile" />
   </Target>
 

@@ -8,7 +8,6 @@
     }
   },
   "profiles": {
-
     "Gevlee.Swallow.Web": {
       "commandName": "Project",
       "launchBrowser": true,

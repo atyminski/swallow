@@ -32,7 +32,7 @@ namespace Gevlee.Swallow.Api
 				options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 				options.RegisterValidatorsFromAssemblyContaining<Startup>();
 			});
-			services.AddLiteDbPersistance("swallow.db");
+			services.AddLiteDbPersistance("Filename=swallow.db;Connection=shared");
 			services.AddLiteDbRepositories();
 		}
 
@@ -52,8 +52,9 @@ namespace Gevlee.Swallow.Api
 
 			//app.UseHttpsRedirection();
 
-			app.Use((context, next) => {
-				return Task.Run(async () => 
+			app.Use((context, next) =>
+			{
+				return Task.Run(async () =>
 				{
 					var db = context.RequestServices.GetRequiredService<ILiteDatabase>();
 					try
