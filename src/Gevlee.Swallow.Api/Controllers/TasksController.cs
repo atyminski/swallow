@@ -2,6 +2,7 @@
 using Gevlee.Swallow.Api.Extensions.Mappers;
 using Gevlee.Swallow.Core.Persistence.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,10 +13,12 @@ namespace Gevlee.Swallow.Api.Controllers
 	public class TasksController : ControllerBase
 	{
 		private readonly ITaskRepository taskRepository;
+		private readonly ITaskActivityRepository taskActivityRepository;
 
-		public TasksController(ITaskRepository taskRepository)
+		public TasksController(ITaskRepository taskRepository, ITaskActivityRepository taskActivityRepository)
 		{
 			this.taskRepository = taskRepository;
+			this.taskActivityRepository = taskActivityRepository;
 		}
 
 		[HttpGet("{id}")]
@@ -48,6 +51,59 @@ namespace Gevlee.Swallow.Api.Controllers
 			{
 				return new List<TaskModel>(0);
 			}
+		}
+
+		[HttpGet("{taskId}/status")]
+		public IActionResult GetActivity(int taskId)
+		{
+			if(!taskRepository.Exists(taskId))
+			{
+				return NotFound();
+			}
+
+			var activities = taskActivityRepository.FindByTaskId(taskId);
+			var notEnded = activities.SingleOrDefault(x => !x.EndTime.HasValue);
+
+			return Ok(new
+			{
+				Total = activities.Where(x => x.EndTime != null).Select(x => x.EndTime.Value - x.StartTime).Sum(x => x.TotalSeconds),
+				IsActive = notEnded != null,
+				ActiveFrom = notEnded?.StartTime
+			});
+		}
+
+		[HttpPost("{taskId}/start")]
+		public IActionResult StartTask(int taskId)
+		{
+			var task = taskRepository.Get(taskId);
+			if (task == null)
+			{
+				return NotFound();
+			}
+
+			taskActivityRepository.Insert(new Core.Entities.TaskActivity
+			{
+				Task = task,
+				StartTime = DateTime.UtcNow
+			});
+
+			return Ok();
+		}
+
+		[HttpPost("{taskId}/stop")]
+		public IActionResult StopTask(int taskId)
+		{
+			if (!taskRepository.Exists(taskId))
+			{
+				return NotFound();
+			}
+
+			var startedActivity = taskActivityRepository.FindActive(taskId);
+			startedActivity.EndTime = DateTime.UtcNow;
+
+			taskActivityRepository.Update(startedActivity);
+
+			return Ok();
 		}
 
 		[HttpPost]

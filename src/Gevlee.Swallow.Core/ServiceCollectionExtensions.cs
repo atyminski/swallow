@@ -16,6 +16,7 @@ namespace Gevlee.Swallow.Core
         public static IServiceCollection AddLiteDbRepositories(this IServiceCollection services)
         {
             services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddTransient<ITaskActivityRepository, TaskActivityRepository>();
             return services;
         }
     }

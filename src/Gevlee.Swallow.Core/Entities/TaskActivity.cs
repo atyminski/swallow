@@ -4,6 +4,11 @@ namespace Gevlee.Swallow.Core.Entities
 {
     public class TaskActivity
     {
+		public int Id
+		{
+			get; set;
+		}
+
 		public Task Task
 		{
 			get; set;
@@ -14,7 +19,7 @@ namespace Gevlee.Swallow.Core.Entities
 			get; set;
 		}
 
-		public DateTime EndTime
+		public DateTime? EndTime
 		{
 			get; set;
 		}
