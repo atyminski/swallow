@@ -13,12 +13,24 @@
                                 </span>
                             </div>
                             <div class="col-2 d-flex justify-content-end">
+                                <span class="align-self-center mr-5">
+                                    (@($"{(int)task.TotalElapsedTime.TotalHours:00}:{task.TotalElapsedTime.Minutes:00}:{task.TotalElapsedTime.Seconds:00}"))
+                                </span>
                                 <button class="btn btn-danger ml-1 mr-1" @onclick="@(e => Delete(task.Id))">
                                     <span class="oi oi-trash" aria-hidden="true"></span>
                                 </button>
-                                <button class="btn btn-primary ml-1 mr-1">
-                                    <span class="oi oi-media-play" aria-hidden="true"></span>
-                                </button>
+                                @if(task.IsActive) 
+                                {
+                                    <button class="btn btn-warning ml-1 mr-1">
+                                        <span class="oi oi-media-pause" aria-hidden="true"></span>
+                                    </button>
+                                }
+                                else 
+                                {
+                                    <button class="btn btn-primary ml-1 mr-1">
+                                        <span class="oi oi-media-play" aria-hidden="true"></span>
+                                    </button>
+                                }
                             </div>
                         </div>
                     </li>

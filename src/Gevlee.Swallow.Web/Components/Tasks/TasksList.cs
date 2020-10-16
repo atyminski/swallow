@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace Gevlee.Swallow.Web.Components.Tasks
 {
-	public partial class TasksList : ComponentBase
+	public partial class TasksList : ComponentBase, IDisposable
 	{
 		private ICollection<TaskViewModel> _tasks = new List<TaskViewModel>();
 
@@ -30,6 +31,12 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 		public bool ReadOnly
 		{
 			get; set;
+		}
+
+		private IDisposable CurrentTimerSubscription
+		{
+			get;
+			set;
 		}
 
 		private async Task Add()
@@ -59,6 +66,7 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 		private async Task Refresh()
 		{
 			_tasks = (await TasksService.GetTasksAsync(Date)).ToList();
+			SetupTimer();
 			StateHasChanged();
 		}
 
@@ -67,9 +75,33 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 		//	await Refresh();
 		//}
 
+		private void SetupTimer()
+		{
+			foreach (var task in _tasks)
+			{
+				if (task.IsActive)
+				{
+					UpdateTotalElapsedTime(task);
+					CurrentTimerSubscription?.Dispose();
+					CurrentTimerSubscription = Observable.Interval(TimeSpan.FromSeconds(.1)).Subscribe(_ => UpdateTotalElapsedTime(task));
+				}
+			}
+		}
+
+		public void UpdateTotalElapsedTime(TaskViewModel task)
+		{
+			task.TotalElapsedTime = task.ElapsedTime + (DateTime.UtcNow - task.ActiveSince.Value.ToUniversalTime());
+			StateHasChanged();
+		}
+
 		protected override async Task OnParametersSetAsync()
 		{
 			await Refresh();
+		}
+
+		public void Dispose()
+		{
+			CurrentTimerSubscription?.Dispose();
 		}
 	}
 }

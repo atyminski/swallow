@@ -27,7 +27,7 @@ namespace Gevlee.Swallow.Api.Controllers
 			var task = taskRepository.Get(id);
 			if (task != null)
 			{
-				return task.ToModel();
+				return task.ToModel(taskActivityRepository.FindByTaskId(id));
 			}
 			else
 			{
@@ -45,7 +45,7 @@ namespace Gevlee.Swallow.Api.Controllers
 
 			if (tasks != null)
 			{
-				return tasks.Select(x => x.ToModel()).ToList();
+				return tasks.Select(x => x.ToModel(taskActivityRepository.FindByTaskId(x.Id))).ToList();
 			}
 			else
 			{

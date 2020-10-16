@@ -40,8 +40,14 @@ namespace Gevlee.Swallow.Web.Services
 			return (await response.Content.ReadFromJsonAsync<IEnumerable<TaskModel>>()).Select(x => new TaskViewModel
 			{
 				Id = x.Id,
-				Name = x.Name
+				Name = x.Name,
+				IsActive = x.IsActive,
+				ActiveSince = x.ActiveSince,
+				ElapsedTime = TimeSpan.FromSeconds(x.ElapsedSeconds),
+				TotalElapsedTime = TimeSpan.FromSeconds(x.ElapsedSeconds)
 			});
 		}
+
+
 	}
 }

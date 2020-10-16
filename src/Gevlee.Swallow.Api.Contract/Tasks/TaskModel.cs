@@ -18,5 +18,20 @@ namespace Gevlee.Swallow.Api.Contract.Tasks
 		{
 			get; set;
 		}
+
+		public bool IsActive
+		{
+			get; set;
+		}
+
+		public DateTime? ActiveSince
+		{
+			get; set;
+		}
+
+		public double ElapsedSeconds
+		{
+			get; set;
+		}
 	}
 }

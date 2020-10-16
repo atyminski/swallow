@@ -1,5 +1,7 @@
 ﻿using Gevlee.Swallow.Api.Contract.Tasks;
 using Gevlee.Swallow.Core.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gevlee.Swallow.Api.Extensions.Mappers
 {
@@ -23,6 +25,16 @@ namespace Gevlee.Swallow.Api.Extensions.Mappers
                 Name = entity.Name,
                 Date = entity.Date
             };
+        }
+
+        public static TaskModel ToModel(this Task entity, IEnumerable<TaskActivity> activities)
+        {
+            var taskModel = entity.ToModel();
+            var notEndedActivity = activities.OrderByDescending(x => x.StartTime).FirstOrDefault(x => x.EndTime == null);
+            taskModel.IsActive = notEndedActivity != null;
+            taskModel.ActiveSince = notEndedActivity?.StartTime;
+            taskModel.ElapsedSeconds = activities.Where(x => x.EndTime.HasValue).Select(x => x.EndTime.Value - x.StartTime).Sum(x => x.TotalSeconds);
+            return taskModel;
         }
     }
 }
