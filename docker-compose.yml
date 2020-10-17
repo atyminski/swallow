@@ -2,16 +2,12 @@ version: "3"
 
 services:
     api:
-        build:
-            dockerfile: Dockerfile.api
-            context: .
+        image: ghcr.io/gevlee/swallow-api:latest
         restart: unless-stopped
         volumes:
             - ./data/:/app/data/
     web:
-        build:
-            dockerfile: Dockerfile.web
-            context: .
+        image: ghcr.io/gevlee/swallow-web:latest
         restart: unless-stopped
         depends_on:
             - api
