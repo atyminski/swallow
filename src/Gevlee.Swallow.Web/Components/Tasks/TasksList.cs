@@ -12,7 +12,7 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 {
 	public partial class TasksList : ComponentBase, IDisposable
 	{
-		private ICollection<TaskViewModel> _tasks = new List<TaskViewModel>();
+		private List<TaskViewModel> _tasks = new List<TaskViewModel>();
 
 		private string _currentTaskName;
 
@@ -28,6 +28,7 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 			get; set;
 		}
 
+		[Parameter]
 		public bool ReadOnly
 		{
 			get; set;
@@ -63,6 +64,30 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 			//Refresh();
 		}
 
+		public async Task Pause(int id)
+		{
+			await TasksService.PauseTaskAsync(id);
+			var pausedTask = await TasksService.GetTaskAsync(id);
+			_tasks[_tasks.FindIndex(x => x.Id == id)] = pausedTask;
+			SetupTimer();
+			StateHasChanged();
+		}
+
+		public async Task Start(int id)
+		{
+			var activeTaskId = _tasks.FirstOrDefault(x => x.IsActive)?.Id;
+			if (activeTaskId.HasValue)
+			{
+				await Pause(activeTaskId.Value);
+			}
+
+			await TasksService.StartTaskAsync(id);
+			var startedTask = await TasksService.GetTaskAsync(id);
+			_tasks[_tasks.FindIndex(x => x.Id == id)] = startedTask;
+			SetupTimer();
+			StateHasChanged();
+		}
+
 		private async Task Refresh()
 		{
 			_tasks = (await TasksService.GetTasksAsync(Date)).ToList();
@@ -77,12 +102,12 @@ namespace Gevlee.Swallow.Web.Components.Tasks
 
 		private void SetupTimer()
 		{
+			CurrentTimerSubscription?.Dispose();
 			foreach (var task in _tasks)
 			{
 				if (task.IsActive)
 				{
 					UpdateTotalElapsedTime(task);
-					CurrentTimerSubscription?.Dispose();
 					CurrentTimerSubscription = Observable.Interval(TimeSpan.FromSeconds(.1)).Subscribe(_ => UpdateTotalElapsedTime(task));
 				}
 			}

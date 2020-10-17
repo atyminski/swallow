@@ -1,16 +1,16 @@
 ﻿<div class="row">
-    <div class="col-1">
-        <button class="btn btn-outline-primary w-100" @onclick="PreviousDay">
+    <div class="col-md-1 col-sm-2">
+        <button class="btn btn-outline-primary" @onclick="PreviousDay">
             <span class="oi oi-chevron-left" aria-hidden="true"></span>
         </button>
     </div>
-    <div class="col-10">
+    <div class="col-md-10 col-sm-8">
         <button class="btn btn-primary w-100">
             @Current.ToString("dd MMMM yyyy")
         </button>
     </div>
-    <div class="col-1">
-        <button class="btn btn-outline-primary w-100" @onclick="NextDay">
+    <div class="col-md-1 col-sm-2 d-flex justify-content-end">
+        <button class="btn btn-outline-primary" @onclick="NextDay">
             <span class="oi oi-chevron-right" aria-hidden="true"></span>
         </button>
     </div>

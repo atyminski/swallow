@@ -4,6 +4,9 @@ COPY ./src/Gevlee.Swallow.Web /source/Gevlee.Swallow.Web
 COPY ./src/Gevlee.Swallow.Api.Contract /source/Gevlee.Swallow.Api.Contract
 
 WORKDIR /source/Gevlee.Swallow.Web
+RUN rm -r node_modules
+RUN ls -la
+
 RUN npm install
 ENV NODE_ENV='production'
 RUN npm run compile
@@ -19,10 +22,10 @@ WORKDIR /source/Gevlee.Swallow.Web
 
 RUN /root/.dotnet/tools/libman restore
 RUN dotnet restore
-RUN dotnet build -c Release -o /build
+RUN dotnet build -c Release -o /build /p:SkipBuildContent=True
 
 FROM build-env AS publish
-RUN dotnet publish -c Release -o /publish
+RUN dotnet publish -c Release -o /publish /p:SkipBuildContent=True
 
 FROM nginx:alpine AS final
 

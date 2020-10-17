@@ -31,7 +31,7 @@ namespace Gevlee.Swallow.Api
 				options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 				options.RegisterValidatorsFromAssemblyContaining<Startup>();
 			});
-			services.AddLiteDbPersistance("Filename=swallow.db;Connection=shared");
+			services.AddLiteDbPersistance();
 			services.AddLiteDbRepositories();
 		}
 

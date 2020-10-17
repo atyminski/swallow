@@ -44,12 +44,11 @@
     <EmbeddedResource Include="appsettings.local.json" />
   </ItemGroup>
   
-  <Target Name="RestoreNpm" BeforeTargets="BuildFrontend" Condition="!Exists('node_modules')">
+   <Target Name="RestoreNpm" BeforeTargets="BuildContent" Condition="!Exists('node_modules')">
     <Exec Command="npm install" />
   </Target>
   
-  <Target Name="BuildFrontend" BeforeTargets="Build">
+  <Target Name="BuildContent" Condition="'$(SkipBuildContent)' != 'True'" BeforeTargets="PreBuildEvent">
     <Exec Command="npm run compile" />
-  </Target>
-
+  </Target> 
 </Project>

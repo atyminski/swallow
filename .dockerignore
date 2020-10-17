@@ -1,3 +1,10 @@
-﻿ **/node_modules
- **/wwwroot/css
- **/wwwroot/lib
+﻿src/**/node_modules/
+src/**/wwwroot/css/
+src/**/wwwroot/lib/
+src/**/bin/
+src/**/obj/
+src/**/out/
+Dockerfile*
+.dockerignore
+application.Development.json
+application.local.json

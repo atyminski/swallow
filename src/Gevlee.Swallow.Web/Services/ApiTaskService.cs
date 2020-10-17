@@ -28,9 +28,16 @@ namespace Gevlee.Swallow.Web.Services
 			response.EnsureSuccessStatusCode();
 		}
 
-		public void DeleteTask(DateTime date, int id)
+		public async Task StartTaskAsync(int taskId)
 		{
-			throw new NotImplementedException();
+			var response = await client.PostAsync($"tasks/{taskId}/start", null);
+			response.EnsureSuccessStatusCode();
+		}
+
+		public async Task PauseTaskAsync(int taskId)
+		{
+			var response = await client.PostAsync($"tasks/{taskId}/stop", null);
+			response.EnsureSuccessStatusCode();
 		}
 
 		public async Task<IEnumerable<TaskViewModel>> GetTasksAsync(DateTime dateTime)
@@ -48,6 +55,20 @@ namespace Gevlee.Swallow.Web.Services
 			});
 		}
 
-
+		public async Task<TaskViewModel> GetTaskAsync(int taskId)
+		{
+			var response = await client.GetAsync($"tasks/{taskId}");
+			response.EnsureSuccessStatusCode();
+			var responseObj = await response.Content.ReadFromJsonAsync<TaskModel>();
+			return new TaskViewModel
+			{
+				Id = responseObj.Id,
+				Name = responseObj.Name,
+				IsActive = responseObj.IsActive,
+				ActiveSince = responseObj.ActiveSince,
+				ElapsedTime = TimeSpan.FromSeconds(responseObj.ElapsedSeconds),
+				TotalElapsedTime = TimeSpan.FromSeconds(responseObj.ElapsedSeconds)
+			};
+		}
 	}
 }
