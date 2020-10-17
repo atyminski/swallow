@@ -6,10 +6,6 @@ on:
     branches:
       - master
 
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
-
   # Run tests for any PRs.
   pull_request:
 
@@ -67,7 +63,7 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag swallow-api $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
       - name: Push Web image to GitHub Container Registry
@@ -89,5 +85,5 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag swallow-web $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
