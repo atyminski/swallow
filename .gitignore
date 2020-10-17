@@ -354,3 +354,4 @@ MigrationBackup/
 /src/Gevlee.Swallow.Web/Lib
 /src/Gevlee.Swallow.Web/wwwroot/css/main.css
 /src/Gevlee.Swallow.Web/wwwroot/lib
+/data/swallow.db
