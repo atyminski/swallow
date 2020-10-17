@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/src/Gevlee.Swallow.Api/swallow.db
+*.min.js
+*.min.css
+/src/Gevlee.Swallow.Web/Lib
+/src/Gevlee.Swallow.Web/wwwroot/css/main.css
+/src/Gevlee.Swallow.Web/wwwroot/lib

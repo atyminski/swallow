@@ -1,0 +1,6 @@
+﻿@page "/"
+
+<DaySwitch @bind-Current="Date"/>
+<div class="mt-4">
+    <Gevlee.Swallow.Web.Components.Tasks.TasksList ReadOnly="@(Date.ToUniversalTime().Date != DateTime.UtcNow.Date)" Date="@Date"/>
+</div>

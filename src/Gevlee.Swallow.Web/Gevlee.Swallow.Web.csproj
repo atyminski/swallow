@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="dist\**" />
+    <Content Remove="dist\**" />
+    <EmbeddedResource Remove="dist\**" />
+    <None Remove="dist\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.8" />
+    <PackageReference Include="System.Net.Http.Json" Version="3.2.0" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gevlee.Swallow.Api.Contract\Gevlee.Swallow.Api.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Watch Include="gulpfile.js;Js/**/*.js;Sass/**/*.scss" Exclude="node_modules/**/*;bin/**/*;obj/**/*" />
+  </ItemGroup>
+
+  <!-- Embedd production appsettings -->
+  <ItemGroup>
+    <EmbeddedResource Include="appsettings.json" />
+  </ItemGroup>
+
+  <!-- Embedd local appsettings -->
+  <ItemGroup Condition="Exists('appsettings.local.json') And $(Configuration)=='Debug'">
+    <EmbeddedResource Include="appsettings.local.json" />
+  </ItemGroup>
+  
+   <Target Name="RestoreNpm" BeforeTargets="BuildContent" Condition="!Exists('node_modules')">
+    <Exec Command="npm install" />
+  </Target>
+  
+  <Target Name="BuildContent" Condition="'$(SkipBuildContent)' != 'True'" BeforeTargets="PreBuildEvent">
+    <Exec Command="npm run compile" />
+  </Target> 
+</Project>
