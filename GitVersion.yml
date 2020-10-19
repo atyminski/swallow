@@ -1,0 +1,7 @@
+assembly-versioning-scheme: MajorMinorPatch
+assembly-file-versioning-scheme: MajorMinorPatch
+branches:
+  develop:
+    regex: (origin/)?dev(elop)?(ment)?$
+    tag: unstable
+    increment: Patch
