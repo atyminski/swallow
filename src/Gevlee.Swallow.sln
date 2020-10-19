@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gevlee.Swallow.Api", "Gevle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gevlee.Swallow.Web", "Gevlee.Swallow.Web\Gevlee.Swallow.Web.csproj", "{82C80053-F84A-43AE-BB9B-451B9C823264}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gevlee.Swallow.Api.Contract", "Gevlee.Swallow.Api.Contract\Gevlee.Swallow.Api.Contract.csproj", "{B62ACBBD-097D-4288-9D8A-C2C22C5984F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gevlee.Swallow.Api.Contract", "Gevlee.Swallow.Api.Contract\Gevlee.Swallow.Api.Contract.csproj", "{B62ACBBD-097D-4288-9D8A-C2C22C5984F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gevlee.Swallow.Core", "Gevlee.Swallow.Core\Gevlee.Swallow.Core.csproj", "{56AB9915-CCEF-4E1D-8B3D-57ADB7B62595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gevlee.Swallow.Core", "Gevlee.Swallow.Core\Gevlee.Swallow.Core.csproj", "{56AB9915-CCEF-4E1D-8B3D-57ADB7B62595}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{19499F41-B517-4B1A-A710-B2E95CDD12CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,16 @@ Global
 		{56AB9915-CCEF-4E1D-8B3D-57ADB7B62595}.Release|x64.Build.0 = Release|Any CPU
 		{56AB9915-CCEF-4E1D-8B3D-57ADB7B62595}.Release|x86.ActiveCfg = Release|Any CPU
 		{56AB9915-CCEF-4E1D-8B3D-57ADB7B62595}.Release|x86.Build.0 = Release|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Debug|x64.Build.0 = Debug|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Release|x64.ActiveCfg = Release|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Release|x64.Build.0 = Release|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{19499F41-B517-4B1A-A710-B2E95CDD12CF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
