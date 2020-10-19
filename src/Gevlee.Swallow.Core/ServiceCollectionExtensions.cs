@@ -3,6 +3,7 @@ using Gevlee.Swallow.Core.Persistence.Repository;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace Gevlee.Swallow.Core
 {
@@ -12,8 +13,12 @@ namespace Gevlee.Swallow.Core
         {
             services.AddScoped<ILiteDatabase>((provider) => 
             {
-                var filename = provider.GetRequiredService<IConfiguration>().GetSection("Db:LiteDb:DbFile")?.Value ?? "swallow.db";
-                return new LiteDatabase($"Filename={filename};Connection=shared", LiteDbConfig.Mapper);
+                var filePath = Path.GetFullPath(provider.GetRequiredService<IConfiguration>().GetSection("Db:LiteDb:DbFile")?.Value ?? "swallow.db");
+                if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                }
+                return new LiteDatabase($"Filename={filePath};Connection=shared", LiteDbConfig.Mapper);
             });
             return services;
         }
