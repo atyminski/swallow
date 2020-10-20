@@ -24,10 +24,13 @@ class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+
+    [Parameter("Project. Available options: Api, Web or empty")]
+    readonly string Project = string.Empty;
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -64,4 +67,41 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
+    Target Publish => _ => _
+    .DependsOn(Clean)
+    .Executes(() =>
+    {
+        PublishApi("win-x64", "netcoreapp3.1");
+        PublishApi("linux-x64", "netcoreapp3.1");
+        PublishWebClient();
+    });
+
+    void PublishApi(string runtime = null, string framework = null)
+    {
+        var output = ArtifactsDirectory / "api";
+        if(!string.IsNullOrWhiteSpace(framework) || !string.IsNullOrWhiteSpace(framework)) 
+        {
+            output /= string.Join("_", runtime);
+        }
+        DotNetPublish(s => s
+            .SetProject(Solution.GetProject("Gevlee.Swallow.Api"))
+            .SetConfiguration(Configuration.Release)
+            .SetFramework(framework)
+            .SetRuntime(runtime)
+            .SetAssemblyVersion(GitVersion.AssemblySemVer)
+            .SetFileVersion(GitVersion.AssemblySemFileVer)
+            .SetInformationalVersion(GitVersion.InformationalVersion)
+            .SetOutput(output));
+    }
+
+    void PublishWebClient(string runtime = null, string framework = null)
+    {
+        DotNetPublish(s => s
+            .SetProject(Solution.GetProject("Gevlee.Swallow.Web"))
+            .SetConfiguration(Configuration.Release)
+            .SetAssemblyVersion(GitVersion.AssemblySemVer)
+            .SetFileVersion(GitVersion.AssemblySemFileVer)
+            .SetInformationalVersion(GitVersion.InformationalVersion)
+            .SetOutput(ArtifactsDirectory / "web"));
+    }
 }
