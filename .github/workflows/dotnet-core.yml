@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Setup node.js
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: Install libman
+      run: dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+    - name: Install dependencies
+      run: |
+       dotnet restore src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj
+       dotnet tool run libman src/Gevlee.Swallow.Web
+    - name: Build
+      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release --no-restore
+    - name: Publish
+      run: dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release -o ./artifacts/web
+    - name: Upload swallow_web artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: swallow_web
+        path: ./artifacts/web
