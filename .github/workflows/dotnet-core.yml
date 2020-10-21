@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
        dotnet restore src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj
-       dotnet tool run libman src/Gevlee.Swallow.Web
+       dotnet tool run Microsoft.Web.LibraryManager.Cli src/Gevlee.Swallow.Web
     - name: Build
       run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release --no-restore
     - name: Publish
