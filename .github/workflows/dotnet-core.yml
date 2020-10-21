@@ -1,0 +1,64 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build_web:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Setup node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: Install libman
+      run: dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+    - name: Install dependencies
+      run: |
+       cd ./src/Gevlee.Swallow.Web
+       dotnet restore
+       libman restore
+    - name: Build
+      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release --no-restore
+    - name: Publish
+      run: dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release -o ./artifacts/web
+    - name: Upload swallow_web artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: swallow_web
+        path: ./artifacts/web
+
+  build_api:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: |
+       cd ./src/Gevlee.Swallow.Api
+       dotnet restore
+    - name: Build
+      run: dotnet build src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --no-restore
+    - name: Publish
+      run: |
+        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release -o ./artifacts/api
+    - name: Upload swallow_api_win_x64 artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: swallow_api_${{ matrix.os }}
+        path: ./artifacts/api
