@@ -6,8 +6,10 @@ on:
 
 jobs:
   build_web:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -36,8 +38,10 @@ jobs:
         path: ./artifacts/web
 
   build_api:
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -52,15 +56,9 @@ jobs:
       run: dotnet build src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --no-restore
     - name: Publish
       run: |
-        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --runtime win-x64 -o ./artifacts/api/win-x64
-        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --runtime linux-x64 -o ./artifacts/api/linux-x64
+        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release -o ./artifacts/api
     - name: Upload swallow_api_win_x64 artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: swallow_api_win_x64
-        path: ./artifacts/api/win-x64 
-    - name: Upload swallow_api_linux_x64 artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: swallow_api_linux_x64
-        path: ./artifacts/api/linux-x64 
+        name: swallow_api_${{ matrix.os }}
+        path: ./artifacts/api
