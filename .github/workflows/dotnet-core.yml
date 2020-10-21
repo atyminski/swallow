@@ -49,11 +49,11 @@ jobs:
        cd ./src/Gevlee.Swallow.Api
        dotnet restore
     - name: Build
-      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Api.csproj --configuration Release --no-restore
+      run: dotnet build src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --no-restore
     - name: Publish
       run: |
-        dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Api.csproj --configuration Release --runtime win-x64 -o ./artifacts/api/win-x64
-        dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Api.csproj --configuration Release --runtime linux-x64 -o ./artifacts/api/linux-x64
+        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --runtime win-x64 -o ./artifacts/api/win-x64
+        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --runtime linux-x64 -o ./artifacts/api/linux-x64
     - name: Upload swallow_api_win_x64 artifacts
       uses: actions/upload-artifact@v2
       with:
