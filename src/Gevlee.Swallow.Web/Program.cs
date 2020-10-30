@@ -17,15 +17,15 @@ namespace Gevlee.Swallow.Web
 			var builder = WebAssemblyHostBuilder.CreateDefault(args);
 			builder.RootComponents.Add<App>("app");
 
-			ConfigureConfiguration(builder.Configuration, builder.HostEnvironment);
-			ConfigureServices(builder.Services, builder.HostEnvironment);
+			ConfigureConfiguration(builder.Configuration);
+			ConfigureServices(builder.Services);
 
 			var host = builder.Build();
 
 			await host.RunAsync();
 		}
 
-		private static void ConfigureServices(IServiceCollection services, IWebAssemblyHostEnvironment hostEnvironment)
+		public static void ConfigureServices(IServiceCollection services)
 		{
 			services.AddTransient(provider =>
 			{
@@ -34,7 +34,7 @@ namespace Gevlee.Swallow.Web
 			services.AddApiService<ITasksService, ApiTaskService>();
 		}
 
-		private static void ConfigureConfiguration(IConfigurationBuilder configurationBuilder, IWebAssemblyHostEnvironment hostEnvironment)
+		public static void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
 		{
 			Assembly assembly = typeof(Program).Assembly;
 
