@@ -1,12 +1,12 @@
 ﻿using Gevlee.Swallow.Api.Contract.Tasks;
-using Gevlee.Swallow.Api.Extensions.Mappers;
+using Gevlee.Swallow.Server.Extensions.Mappers;
 using Gevlee.Swallow.Core.Persistence.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gevlee.Swallow.Api.Controllers
+namespace Gevlee.Swallow.Server.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]

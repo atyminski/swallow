@@ -2,7 +2,7 @@
 using Gevlee.Swallow.Api.Contract.Tasks;
 
 
-namespace Gevlee.Swallow.Api.Validators
+namespace Gevlee.Swallow.Server.Validators
 {
 	public class TaskModelValidator : AbstractValidator<TaskModel>
 	{

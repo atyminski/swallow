@@ -3,7 +3,7 @@ using Gevlee.Swallow.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gevlee.Swallow.Api.Extensions.Mappers
+namespace Gevlee.Swallow.Server.Extensions.Mappers
 {
     public static class TaskMappersExtensions
     {

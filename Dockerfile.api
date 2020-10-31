@@ -6,19 +6,19 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["./src/Gevlee.Swallow.Api", "Gevlee.Swallow.Api/"]
+COPY ["./src/Gevlee.Swallow.Server", "Gevlee.Swallow.Server/"]
 COPY ["./src/Gevlee.Swallow.Core", "Gevlee.Swallow.Core/"]
 COPY ["./src/Gevlee.Swallow.Api.Contract", "Gevlee.Swallow.Api.Contract/"]
-RUN dotnet restore "Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj"
-WORKDIR "/src/Gevlee.Swallow.Api"
-RUN dotnet build "Gevlee.Swallow.Api.csproj" -c Release -o /app/build
+RUN dotnet restore "Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj"
+WORKDIR "/src/Gevlee.Swallow.Server"
+RUN dotnet build "Gevlee.Swallow.Server.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Gevlee.Swallow.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "Gevlee.Swallow.Server.csproj" -c Release -o /app/publish
 
 FROM base AS final
 ENV ASPNETCORE_URLS=http://0.0.0.0:80/
 WORKDIR /app
 VOLUME /app/data
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Gevlee.Swallow.Api.dll"]
+ENTRYPOINT ["dotnet", "Gevlee.Swallow.Server.dll"]

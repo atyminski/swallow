@@ -84,7 +84,7 @@ class Build : NukeBuild
             output /= string.Join("_", runtime);
         }
         DotNetPublish(s => s
-            .SetProject(Solution.GetProject("Gevlee.Swallow.Api"))
+            .SetProject(Solution.GetProject("Gevlee.Swallow.Server"))
             .SetConfiguration(Configuration.Release)
             .SetFramework(framework)
             .SetRuntime(runtime)

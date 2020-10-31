@@ -50,13 +50,13 @@ jobs:
         dotnet-version: 3.1.301
     - name: Install dependencies
       run: |
-       cd ./src/Gevlee.Swallow.Api
+       cd ./src/Gevlee.Swallow.Server
        dotnet restore
     - name: Build
-      run: dotnet build src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release --no-restore
+      run: dotnet build src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
     - name: Publish
       run: |
-        dotnet publish src/Gevlee.Swallow.Api/Gevlee.Swallow.Api.csproj --configuration Release -o ./artifacts/api
+        dotnet publish src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release -o ./artifacts/api
     - name: Upload swallow_api_win_x64 artifacts
       uses: actions/upload-artifact@v2
       with:

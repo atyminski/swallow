@@ -1,14 +1,16 @@
 using FluentValidation.AspNetCore;
 using Gevlee.Swallow.Core;
+using Gevlee.Swallow.Server.Extensions;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace Gevlee.Swallow.Api
+namespace Gevlee.Swallow.Server
 {
 	public class Startup
 	{
@@ -22,7 +24,6 @@ namespace Gevlee.Swallow.Api
 			get;
 		}
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<IISServerOptions>(options =>
@@ -30,7 +31,10 @@ namespace Gevlee.Swallow.Api
 				options.AutomaticAuthentication = false;
 			});
 
-			services.AddControllers()
+			services.AddControllers(config =>
+			{
+				config.UseCentralRoutePrefix(new RouteAttribute("api"));
+			})
 			.AddFluentValidation(options =>
 			{
 				options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
@@ -40,7 +44,6 @@ namespace Gevlee.Swallow.Api
 			services.AddLiteDbRepositories();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -52,42 +55,51 @@ namespace Gevlee.Swallow.Api
 					options.AllowAnyMethod();
 					options.AllowAnyHeader();
 				});
+				app.UseWebAssemblyDebugging();
 			}
 
 			//app.UseHttpsRedirection();
 
 			app.Use((context, next) =>
 			{
-				return Task.Run(async () =>
+				if (context.Request.Path.StartsWithSegments("/api"))
 				{
-					var db = context.RequestServices.GetRequiredService<ILiteDatabase>();
-					try
+					return Task.Run(async () =>
 					{
-						if (db.BeginTrans())
+						var db = context.RequestServices.GetRequiredService<ILiteDatabase>();
+						try
 						{
-							await next.Invoke();
-							db.Commit();
+							if (db.BeginTrans())
+							{
+								await next.Invoke();
+								db.Commit();
+							}
+							else
+							{
+								throw new System.Exception("Cannot open transaction");
+							}
 						}
-						else
+						catch (System.Exception e)
 						{
-							throw new System.Exception("Cannot open transaction");
+							db.Rollback();
+							throw;
 						}
-					}
-					catch (System.Exception e)
-					{
-						db.Rollback();
-						throw;
-					}
-				});
+					});
+				}
+				else
+					return next.Invoke();
 			});
 
-			app.UseRouting();
+			app.UseBlazorFrameworkFiles();
+			app.UseStaticFiles();
 
+			app.UseRouting();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+				endpoints.MapFallbackToFile("index.html");
 			});
 		}
 	}
