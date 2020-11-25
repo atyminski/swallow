@@ -26,7 +26,7 @@ jobs:
       run: |
        cd ./src
        dotnet restore
-       cd ./src/Gevlee.Swallow.Web
+       cd ./Gevlee.Swallow.Web
        libman restore
     - name: Build
       run: dotnet build src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
