@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.301
+        dotnet-version: 5.0.100
     - name: Setup node.js
       uses: actions/setup-node@v1
       with:
@@ -24,41 +24,16 @@ jobs:
       run: dotnet tool install -g Microsoft.Web.LibraryManager.Cli
     - name: Install dependencies
       run: |
-       cd ./src/Gevlee.Swallow.Web
+       cd ./src
        dotnet restore
+       cd ./src/Gevlee.Swallow.Web
        libman restore
     - name: Build
-      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release --no-restore
+      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Web.csproj --configuration Release -o ./artifacts/web
-    - name: Upload swallow_web artifacts
+      run: dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Server.csproj --configuration Release -o ./artifacts/
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: swallow_web
-        path: ./artifacts/web
-
-  build_api:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.301
-    - name: Install dependencies
-      run: |
-       cd ./src/Gevlee.Swallow.Server
-       dotnet restore
-    - name: Build
-      run: dotnet build src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
-    - name: Publish
-      run: |
-        dotnet publish src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release -o ./artifacts/api
-    - name: Upload swallow_api_win_x64 artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: swallow_api_${{ matrix.os }}
-        path: ./artifacts/api
+        name: swallow
+        path: ./artifacts
