@@ -15,7 +15,7 @@ namespace Gevlee.Swallow.Web
 		public static async Task Main(string[] args)
 		{
 			var builder = WebAssemblyHostBuilder.CreateDefault(args);
-			builder.RootComponents.Add<App>("app");
+			builder.RootComponents.Add<App>("#app");
 
 			ConfigureConfiguration(builder.Configuration);
 			ConfigureServices(builder.Services);

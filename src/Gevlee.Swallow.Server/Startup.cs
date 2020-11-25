@@ -79,7 +79,7 @@ namespace Gevlee.Swallow.Server
 								throw new System.Exception("Cannot open transaction");
 							}
 						}
-						catch (System.Exception e)
+						catch (System.Exception)
 						{
 							db.Rollback();
 							throw;
