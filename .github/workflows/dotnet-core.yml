@@ -29,9 +29,9 @@ jobs:
        cd ./src/Gevlee.Swallow.Web
        libman restore
     - name: Build
-      run: dotnet build src/Gevlee.Swallow.Web/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
+      run: dotnet build src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish src/Gevlee.Swallow.Web/Gevlee.Swallow.Server.csproj --configuration Release -o ./artifacts/
+      run: dotnet publish src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release -o ./artifacts/
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
