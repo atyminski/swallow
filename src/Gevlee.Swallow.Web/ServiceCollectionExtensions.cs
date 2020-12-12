@@ -1,7 +1,5 @@
-﻿using Gevlee.Swallow.Web.Settings;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿using Gevlee.Swallow.Web.Utils;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace Gevlee.Swallow.Web
 {
@@ -13,17 +11,9 @@ namespace Gevlee.Swallow.Web
 		{
 			serviceCollection.AddHttpClient<T, TInstance>((provider, client) =>
 			{
-				var environment = provider.GetRequiredService<IWebAssemblyHostEnvironment>();
-				var apiUrl = provider.GetRequiredService<AppConfiguration>().Api.Url;
-				
-				if (string.IsNullOrWhiteSpace(apiUrl) || apiUrl.StartsWith('/'))
-				{
-					apiUrl = $"{environment.BaseAddress}{apiUrl.TrimStart('/')}";
-				}
-
-				apiUrl = apiUrl.TrimEnd('/') + "/";
-				client.BaseAddress = new Uri(apiUrl);
+				client.BaseAddress = provider.GetRequiredService<IApiUrlProvider>().BaseUrl;
 			});
+
 			return serviceCollection;
 		}
 	}

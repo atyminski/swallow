@@ -1,5 +1,6 @@
 using Gevlee.Swallow.Web.Services;
 using Gevlee.Swallow.Web.Settings;
+using Gevlee.Swallow.Web.Utils;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,9 @@ namespace Gevlee.Swallow.Web
 			{
 				return provider.GetRequiredService<IConfiguration>().Get<AppConfiguration>();
 			});
+
 			services.AddApiService<ITasksService, ApiTaskService>();
+			services.AddTransient<IApiUrlProvider, ApiUrlProvider>();
 		}
 
 		public static void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
