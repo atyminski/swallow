@@ -20,14 +20,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - name: Install libman
-      run: dotnet tool install -g Microsoft.Web.LibraryManager.Cli
     - name: Install dependencies
       run: |
        cd ./src
        dotnet restore
-       cd ./Gevlee.Swallow.Web
-       libman restore
     - name: Build
       run: dotnet build src/Gevlee.Swallow.Server/Gevlee.Swallow.Server.csproj --configuration Release --no-restore
     - name: Publish

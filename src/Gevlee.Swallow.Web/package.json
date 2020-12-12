@@ -3,13 +3,19 @@
   "name": "swallow",
   "private": true,
   "scripts": {
-    "compile": "gulp"
+    "compile": "gulp compile",
+    "libs": "gulp libs"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
+    "gulp-mode": "1.0.2",
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "2.6.5",
-    "gulp-mode": "1.0.2"
+    "merge-stream": "^2.0.0",
+    "rimraf": "^3.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "open-iconic": "^1.1.1"
+  }
 }
