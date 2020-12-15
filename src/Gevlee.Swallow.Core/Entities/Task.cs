@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Gevlee.Swallow.Core.Entities
 {
@@ -18,5 +19,10 @@ namespace Gevlee.Swallow.Core.Entities
 		{
 			get; set;
 		}
+
+		public ICollection<Tag> Tags
+		{
+			get; set;
+		} = new List<Tag>();
 	}
 }
