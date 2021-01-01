@@ -1,5 +1,6 @@
 ﻿using Gevlee.Swallow.Api.Contract.Tags;
 using Gevlee.Swallow.Core.Persistence.Repository;
+using Gevlee.Swallow.Server.Extensions.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gevlee.Swallow.Server.Controllers
@@ -18,10 +19,10 @@ namespace Gevlee.Swallow.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<TagModel> GetById(int id)
         {
-            var task = tagRespository.Get(id);
-            if (task != null)
+            var tag = tagRespository.Get(id);
+            if (tag != null)
             {
-                return task.ToModel(taskActivityRepository.FindByTaskId(id));
+                return tagRespository.Get(id).ToModel();
             }
             else
             {
