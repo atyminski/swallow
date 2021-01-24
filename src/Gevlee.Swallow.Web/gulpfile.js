@@ -29,8 +29,8 @@ gulp.task('libs:copy', function () {
     var openIconic = merge(
         gulp.src(paths.node_modules + 'open-iconic/font/css/open-iconic-bootstrap.min.css')
             .pipe(gulp.dest(paths.libDest + 'open-iconic/css')),
-        gulp.src(paths.node_modules + 'open-iconic/font/fonts/*.*')
-            .pipe(gulp.dest(paths.libDest + 'open-iconic/font'))
+        gulp.src(paths.node_modules + 'open-iconic/font/fonts/open-iconic.*')
+            .pipe(gulp.dest(paths.libDest + 'open-iconic/fonts'))
     )
 
     return merge(bootstrap, openIconic);
